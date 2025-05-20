@@ -13,6 +13,11 @@ int questionNumber = 1;
 
 Random random = new Random();
 
+Console.Write("Добро пожаловать в интеллектуальный тест!\nВведите ваше имя: ");
+string userName = Console.ReadLine().Trim();
+
+Console.WriteLine();
+
 while (questionsAndAnswers.Count > 0)
 {
     int randomIndex = random.Next(0, questionsAndAnswers.Count);
@@ -20,7 +25,7 @@ while (questionsAndAnswers.Count > 0)
 
     Console.WriteLine($"Вопрос №{questionNumber}:\n{question}\n");
 
-    int userAnswer = Convert.ToInt32(Console.ReadLine());
+    int userAnswer = Convert.ToInt32(Console.ReadLine().Trim());
 
     Console.WriteLine();
 
@@ -36,7 +41,7 @@ while (questionsAndAnswers.Count > 0)
 string diagnose = GetDiagnose(rightAnswersCount);
 
 Console.WriteLine($"Вы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
-Console.WriteLine($"Поздравляю, Вы - {diagnose}!");
+Console.WriteLine($"Поздравляю, {userName}. Вы - {diagnose}!");
 
 static string GetDiagnose(int rightAnswersCount)
 {
