@@ -32,8 +32,14 @@ for (int i = 0; i < questions.Length; i++)
     }
 }
 
-string[] results = new string[5];
-results[0] = "";
+string[] diagnoses = new string[6];
+diagnoses[0] = "Идиот";
+diagnoses[1] = "Кретин";
+diagnoses[2] = "Дурак";
+diagnoses[3] = "Нормальный";
+diagnoses[4] = "Талант";
+diagnoses[5] = "Гений";
 
-Console.WriteLine("Вы ответили правильно на " + rightAnswersCount + " из " + questions.Length + " вопросов.");
+Console.WriteLine($"Вы ответили правильно на {rightAnswersCount} из {questions.Length} вопросов.");
+Console.WriteLine($"Поздравляю, Вы - {diagnoses[rightAnswersCount]}!");
 
