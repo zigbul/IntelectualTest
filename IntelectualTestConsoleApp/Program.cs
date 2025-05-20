@@ -1,4 +1,4 @@
-﻿var questionsAndAnswers = new List<(string question, int answer)>()
+﻿var questionsAndAnswers = new List<(string question, int rightAnswer)>()
 {
     ("Сколько будет: 2 + 2 * 2?", 6),
     ("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?", 9),
@@ -16,16 +16,13 @@ Random random = new Random();
 while (questionsAndAnswers.Count > 0)
 {
     int randomIndex = random.Next(0, questionsAndAnswers.Count);
-    
-    var (question, answer) = questionsAndAnswers[randomIndex];
+    var (question, rightAnswer) = questionsAndAnswers[randomIndex];
 
     Console.WriteLine($"Вопрос №{questionNumber}:\n{question}\n");
 
     int userAnswer = Convert.ToInt32(Console.ReadLine());
 
     Console.WriteLine();
-
-    int rightAnswer = answer;
 
     if (userAnswer == rightAnswer)
     {
@@ -36,13 +33,22 @@ while (questionsAndAnswers.Count > 0)
     questionsAndAnswers.RemoveAt(randomIndex);
 }
 
-string[] diagnoses = new string[6];
-diagnoses[0] = "Идиот";
-diagnoses[1] = "Кретин";
-diagnoses[2] = "Дурак";
-diagnoses[3] = "Нормальный";
-diagnoses[4] = "Талант";
-diagnoses[5] = "Гений";
+string diagnose = GetDiagnose(rightAnswersCount);
 
 Console.WriteLine($"Вы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
-Console.WriteLine($"Поздравляю, Вы - {diagnoses[rightAnswersCount]}!");
+Console.WriteLine($"Поздравляю, Вы - {diagnose}!");
+
+static string GetDiagnose(int rightAnswersCount)
+{
+    var diagnoses = new Dictionary<int, string>
+    {
+        { 0, "Идиот" },
+        { 1, "Кретин" },
+        { 2, "Дурак" },
+        { 3, "Нормальный" },
+        { 4, "Талант" },
+        { 5, "Гений" }
+    };
+
+    return diagnoses[rightAnswersCount];
+}
