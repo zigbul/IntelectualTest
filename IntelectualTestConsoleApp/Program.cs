@@ -33,6 +33,8 @@ while (isTesting)
 
         bool isNumber = int.TryParse(Console.ReadLine().Trim(), out int userAnswer);
 
+        Console.WriteLine();
+
         if (isNumber && userAnswer == rightAnswer)
         {
             rightAnswersCount++;
