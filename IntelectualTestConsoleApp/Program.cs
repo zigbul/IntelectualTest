@@ -11,7 +11,9 @@ while (isTesting)
         ("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?", 9),
         ("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
         ("Укол делают каждые полчаса, сколько минут для трех уколов?", 60),
-        ("Пять свечей горело, две потухли. Сколько свечей осталось?", 2)
+        ("Пять свечей горело, две потухли. Сколько свечей осталось?", 2),
+        ("Сколько месяцев в году имеют 28 дней?", 12),
+        ("Сколько яиц можно съесть натощак? ", 1)
     };
 
     int questionsCount = questionsAndAnswers.Count;
@@ -40,7 +42,7 @@ while (isTesting)
         questionsAndAnswers.RemoveAt(randomIndex);
     }
 
-    string diagnose = GetDiagnose(rightAnswersCount);
+    string diagnose = GetDiagnose(rightAnswersCount, questionsCount);
 
     Console.WriteLine($"\nВы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
     Console.WriteLine($"Поздравляю, {userName}. Вы - {diagnose}!");
@@ -49,8 +51,11 @@ while (isTesting)
     isTesting = Console.ReadLine().ToLower() == "да" ? true : false;
 }
 
-static string GetDiagnose(int rightAnswersCount)
+static string GetDiagnose(int rightAnswersCount, int questionsCount)
 {
+    double koeff = (double)rightAnswersCount / questionsCount;
+    int indexOfDiagnose = (int)Math.Floor(koeff * 5);
+
     var diagnoses = new Dictionary<int, string>
         {
             { 0, "Идиот" },
@@ -61,5 +66,5 @@ static string GetDiagnose(int rightAnswersCount)
             { 5, "Гений" }
         };
 
-    return diagnoses[rightAnswersCount];
+    return diagnoses[indexOfDiagnose];
 }
