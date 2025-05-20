@@ -29,11 +29,9 @@ while (isTesting)
 
         Console.WriteLine($"Вопрос №{questionNumber}:\n{question}\n");
 
-        int userAnswer = Convert.ToInt32(Console.ReadLine().Trim());
+        bool isNumber = int.TryParse(Console.ReadLine().Trim(), out int userAnswer);
 
-        Console.WriteLine();
-
-        if (userAnswer == rightAnswer)
+        if (isNumber && userAnswer == rightAnswer)
         {
             rightAnswersCount++;
         }
@@ -44,7 +42,7 @@ while (isTesting)
 
     string diagnose = GetDiagnose(rightAnswersCount);
 
-    Console.WriteLine($"Вы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
+    Console.WriteLine($"\nВы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
     Console.WriteLine($"Поздравляю, {userName}. Вы - {diagnose}!");
     Console.WriteLine("\nХотите пройти тест еще раз? (да/нет)\n");
 
