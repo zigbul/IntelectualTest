@@ -16,9 +16,13 @@ int rightAnswersCount = 0;
 
 for (int i = 0; i < questions.Length; i++)
 {
-    Console.WriteLine(questions[i]);
+    int questionNumber = i + 1;
+
+    Console.WriteLine($"Вопрос №{questionNumber}:\n{questions[i]}\n");
 
     int userAnswer = Convert.ToInt32(Console.ReadLine());
+
+    Console.WriteLine();
 
     int rightAnswer = answers[i];
 
