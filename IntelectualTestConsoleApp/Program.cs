@@ -1,4 +1,6 @@
-﻿Console.Write("Добро пожаловать в интеллектуальный тест!\nВведите ваше имя: ");
+﻿PrintResults();
+
+Console.Write("Добро пожаловать в интеллектуальный тест!\nВведите ваше имя: ");
 string userName = Console.ReadLine().Trim();
 
 bool isTesting = true;
@@ -48,6 +50,9 @@ while (isTesting)
 
     Console.WriteLine($"\nВы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
     Console.WriteLine($"Поздравляю, {userName}. Вы - {diagnose}!");
+
+    WriteResultsToFile(userName, rightAnswersCount, diagnose);
+
     Console.WriteLine("\nХотите пройти тест еще раз? (да/нет)\n");
 
     isTesting = Console.ReadLine().ToLower() == "да" ? true : false;
@@ -69,4 +74,56 @@ static string GetDiagnose(int rightAnswersCount, int questionsCount)
         };
 
     return diagnoses[indexOfDiagnose];
+}
+
+static string GetResultsFilePath()
+{
+    string currentDirectoryPath = Directory.GetCurrentDirectory();
+    string projectDirectoryPath = Path.Combine(currentDirectoryPath, @"..\..\..\");
+    string resultsFileName = "results.txt";
+    string resultsFileNamePath = Path.Combine(projectDirectoryPath, resultsFileName);
+
+    return resultsFileNamePath;
+}
+
+static void PrintResults()
+{
+    string pathToResults = GetResultsFilePath();
+
+    Console.WriteLine($"Имя пользователя - Кол-во правильных ответов - Диагноз");
+
+    if (File.Exists(pathToResults) == false)
+    {
+        using FileStream fs = File.Create(pathToResults);
+    }
+
+    bool areResultsNotEmpty = new FileInfo(pathToResults).Length != 0;
+
+    if (areResultsNotEmpty)
+    {
+        using (StreamReader sr = new StreamReader(pathToResults))
+        {
+            string resultLine = sr.ReadLine();
+
+            while (string.IsNullOrEmpty(resultLine) == false)
+            {
+                Console.WriteLine(resultLine);
+                resultLine = sr.ReadLine();
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine("Пока результатов нет");
+    }
+}
+
+static void WriteResultsToFile(string userName, int rightAnswersCount, string diagnose)
+{
+    string resultFilePath = GetResultsFilePath();
+
+    using (StreamWriter writer = new StreamWriter(resultFilePath, true, System.Text.Encoding.Default))
+    {
+        writer.WriteLine($"{userName} - {rightAnswersCount} - {diagnose}");
+    }
 }
