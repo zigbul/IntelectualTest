@@ -7,30 +7,16 @@ bool isTesting = true;
 
 while (isTesting)
 {
-    var questions = new List<Question>()
-    {
-        new Question("Сколько будет: 2 + 2 * 2?", 6),
-        new Question("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?", 9),
-        new Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
-        new Question("Укол делают каждые полчаса, сколько минут для трех уколов?", 60),
-        new Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 2),
-        new Question("Сколько месяцев в году имеют 28 дней?", 12),
-        new Question("Сколько яиц можно съесть натощак? ", 1)
-    };
-
+    var questions = new QuestionsStorage();
     int questionsCount = questions.Count;
-    int questionNumber = 1;
 
-    Random random = new Random();
+    int questionNumber = 1;
 
     while (questions.Count > 0)
     {
-        Console.Clear();
+        var (question, rightAnswer) = questions.GetRandomQuestion();
 
-        int randomIndex = random.Next(0, questions.Count);
-        var (question, rightAnswer) = questions[randomIndex];
-
-        Console.WriteLine($"\nВопрос №{questionNumber}:\n{question}\n");
+        Console.WriteLine($"Вопрос №{questionNumber}:\n{question}\n");
 
         bool isNumber = int.TryParse(Console.ReadLine().Trim(), out int userAnswer);
 
@@ -42,7 +28,6 @@ while (isTesting)
         }
 
         questionNumber++;
-        questions.RemoveAt(randomIndex);
     }
 
     user.Diagnosis = GetDiagnose(user.RightAnswersCount, questionsCount);
@@ -81,7 +66,7 @@ static string GetResultsFilePath()
 {
     string currentDirectoryPath = Directory.GetCurrentDirectory();
     string projectDirectoryPath = Path.Combine(currentDirectoryPath, @"..\..\..\");
-    string resultsFileName = "results.txt";
+    string resultsFileName = "users.txt";
     string resultsFileNamePath = Path.Combine(projectDirectoryPath, resultsFileName);
 
     return resultsFileNamePath;
