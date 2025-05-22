@@ -7,28 +7,28 @@ bool isTesting = true;
 
 while (isTesting)
 {
-    var questionsAndAnswers = new List<(string question, int rightAnswer)>()
+    var questions = new List<Question>()
     {
-        ("Сколько будет: 2 + 2 * 2?", 6),
-        ("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?", 9),
-        ("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
-        ("Укол делают каждые полчаса, сколько минут для трех уколов?", 60),
-        ("Пять свечей горело, две потухли. Сколько свечей осталось?", 2),
-        ("Сколько месяцев в году имеют 28 дней?", 12),
-        ("Сколько яиц можно съесть натощак? ", 1)
+        new Question("Сколько будет: 2 + 2 * 2?", 6),
+        new Question("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?", 9),
+        new Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
+        new Question("Укол делают каждые полчаса, сколько минут для трех уколов?", 60),
+        new Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 2),
+        new Question("Сколько месяцев в году имеют 28 дней?", 12),
+        new Question("Сколько яиц можно съесть натощак? ", 1)
     };
 
-    int questionsCount = questionsAndAnswers.Count;
+    int questionsCount = questions.Count;
     int questionNumber = 1;
 
     Random random = new Random();
 
-    while (questionsAndAnswers.Count > 0)
+    while (questions.Count > 0)
     {
         Console.Clear();
 
-        int randomIndex = random.Next(0, questionsAndAnswers.Count);
-        var (question, rightAnswer) = questionsAndAnswers[randomIndex];
+        int randomIndex = random.Next(0, questions.Count);
+        var (question, rightAnswer) = questions[randomIndex];
 
         Console.WriteLine($"\nВопрос №{questionNumber}:\n{question}\n");
 
@@ -42,7 +42,7 @@ while (isTesting)
         }
 
         questionNumber++;
-        questionsAndAnswers.RemoveAt(randomIndex);
+        questions.RemoveAt(randomIndex);
     }
 
     user.Diagnosis = GetDiagnose(user.RightAnswersCount, questionsCount);
