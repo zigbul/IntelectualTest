@@ -19,4 +19,14 @@
 
         return question;
     }
+
+    public void PrintQuestions()
+    {
+        for (int i = 1; i <= Count; i++)
+        {
+            var question = _questions[i - 1];
+
+            Console.WriteLine($"{i}. {question.Text}");
+        }
+    }
 }

@@ -1,4 +1,5 @@
 ﻿
+
 public static class FileSystem
 {
     private static List<Question> _baseQuestions = new List<Question>()
@@ -54,6 +55,7 @@ public static class FileSystem
                     Save(question, FileNames.Questions);
                     data.Add((T)(object)question);
                 }
+
             }
 
             return data;
@@ -108,5 +110,15 @@ public static class FileSystem
             writer.WriteLine($"{data}");
             writer.Close();
         }
+    }
+
+    public static void Delete<T>(int index, FileNames fileName)
+    {
+        string pathToFile = GetPathToFile(fileName);
+
+        var data = Load<T>(fileName).ToList();
+        data.RemoveAt(index);
+
+        File.WriteAllLines(pathToFile, data.Select(item => item.ToString()));
     }
 }

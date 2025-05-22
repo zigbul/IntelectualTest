@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-public class Game
+﻿public class Game
 {
     private bool _isPlaying = true;
     private bool _isTesting = false;
@@ -18,7 +16,8 @@ public class Game
             Console.WriteLine("\n1. Пройти тест" +
                               "\n2. Посмотреть результаты" +
                               "\n3. Добавить свой вопрос" +
-                              "\n4. Выйти из игры");
+                              "\n4. Удалить вопрос" +
+                              "\n5. Выйти из игры");
 
             int userInput;
 
@@ -36,6 +35,9 @@ public class Game
                     AddQuestion();
                     break;
                 case 4:
+                    DeleteQuestion();
+                    break;
+                case 5:
                     ExitGame();
                     break;
                 default:
@@ -43,6 +45,44 @@ public class Game
                     break;
             }
         }
+    }
+
+    private void DeleteQuestion()
+    {
+        Console.Clear();
+
+        var questions = new QuestionsStorage();
+
+        if (questions.Count == 0)
+        {
+            Console.WriteLine("Вопросов нет. Добавьте вопрос, чтобы удалить его.");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.WriteLine("Список ворпосов:\n");
+        questions.PrintQuestions();
+
+        Console.Write("\nВведите номер вопроса, который хотите удалить:\n");
+
+        int userInput;
+
+        while (TryGetUserInput(out userInput) == false) { }
+
+        if (userInput < 1 || userInput > questions.Count)
+        {
+            Console.WriteLine("Вопроса с таким индексом не существует. Попробуйте снова.");
+            Console.ReadKey();
+            return;
+        }
+
+        FileSystem.Delete<Question>(userInput - 1, FileNames.Questions);
+
+        Console.WriteLine();
+        Loading($"Удаляем вопрос номер {userInput}");
+
+        Console.WriteLine($"\nВопрос номер {userInput} успешно удалён.\n");
+        Console.ReadKey();
     }
 
     private void AddQuestion()
