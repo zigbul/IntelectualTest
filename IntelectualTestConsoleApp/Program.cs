@@ -1,7 +1,7 @@
-﻿PrintResults();
+﻿Console.WriteLine("Добро пожаловать в интеллектуальный тест!");
+Console.Write("Введите ваше имя: ");
 
-Console.Write("\nДобро пожаловать в интеллектуальный тест!\nВведите ваше имя: ");
-string userName = Console.ReadLine().Trim();
+var user = new User(Console.ReadLine().Trim());
 
 bool isTesting = true;
 
@@ -19,7 +19,6 @@ while (isTesting)
     };
 
     int questionsCount = questionsAndAnswers.Count;
-    int rightAnswersCount = 0;
     int questionNumber = 1;
 
     Random random = new Random();
@@ -31,7 +30,6 @@ while (isTesting)
         int randomIndex = random.Next(0, questionsAndAnswers.Count);
         var (question, rightAnswer) = questionsAndAnswers[randomIndex];
 
-        PrintResults();
         Console.WriteLine($"\nВопрос №{questionNumber}:\n{question}\n");
 
         bool isNumber = int.TryParse(Console.ReadLine().Trim(), out int userAnswer);
@@ -40,19 +38,21 @@ while (isTesting)
 
         if (isNumber && userAnswer == rightAnswer)
         {
-            rightAnswersCount++;
+            user.AddRightAnswer();
         }
 
         questionNumber++;
         questionsAndAnswers.RemoveAt(randomIndex);
     }
 
-    string diagnose = GetDiagnose(rightAnswersCount, questionsCount);
+    user.Diagnosis = GetDiagnose(user.RightAnswersCount, questionsCount);
+
+    var (name, rightAnswersCount, diagnosis) = user;
 
     Console.WriteLine($"Вы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
-    Console.WriteLine($"Поздравляю, {userName}. Вы - {diagnose}!");
+    Console.WriteLine($"Поздравляю, {name}. Вы - {diagnosis}!");
 
-    WriteResultsToFile(userName, rightAnswersCount, diagnose);
+    WriteResultsToFile(name, rightAnswersCount, diagnosis);
 
     Console.WriteLine("\nХотите пройти тест еще раз? (да/нет)\n");
 
