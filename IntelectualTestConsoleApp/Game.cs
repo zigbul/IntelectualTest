@@ -1,4 +1,6 @@
-﻿public class Game
+﻿using System.ComponentModel;
+
+public class Game
 {
     private bool _isPlaying = true;
     private bool _isTesting = false;
@@ -13,7 +15,10 @@
             Console.Clear();
             Console.WriteLine($"{user.Name}, выберите вариант из меню: ");
 
-            Console.WriteLine("\n1. Пройти тест\n2. Посмотреть результаты\n3. Выйти из игры\n");
+            Console.WriteLine("\n1. Пройти тест" +
+                              "\n2. Посмотреть результаты" +
+                              "\n3. Добавить свой вопрос" +
+                              "\n4. Выйти из игры");
 
             int userInput;
 
@@ -28,6 +33,9 @@
                     PrintResults();
                     break;
                 case 3:
+                    AddQuestion();
+                    break;
+                case 4:
                     ExitGame();
                     break;
                 default:
@@ -35,6 +43,28 @@
                     break;
             }
         }
+    }
+
+    private void AddQuestion()
+    {
+        Console.Clear();
+
+        Console.WriteLine("Введите вопрос, на который можно ответить целым числом.\n");
+
+        string questionText = Console.ReadLine().Trim();
+
+        Console.WriteLine("\nТеперь введите ответ на вопрос. Ответ должен быть целым числом.\n");
+
+        int questionAnswer;
+
+        while (TryGetUserInput(out questionAnswer) == false) { }
+
+        var question = new Question(questionText, questionAnswer);
+
+        FileSystem.Save(question, FileNames.Questions);
+
+        Console.WriteLine("\nВопрос успешно добавлен");
+        Console.ReadKey();
     }
 
     private User CreateUser()
