@@ -135,7 +135,7 @@
 
             user.Diagnosis = CalculateDiagnosis(user.RightAnswersCount, questionsCount);
 
-            Loading();
+            Loading("Тест окончен! Подсчитываем результаты");
 
             var (name, rightAnswersCount, diagnosis) = user;
 
@@ -150,13 +150,13 @@
         }
     }
 
-    private void Loading()
+    private void Loading(string loadingText)
     {
         int totalDots = (int)(1 / 0.3);
 
         for (int i = 1; i <= totalDots; i++)
         {
-            Console.Write($"\rТест окончен! Подсчитываем результаты{new string('.', i)}");
+            Console.Write($"\r{loadingText}{new string('.', i)}");
             Thread.Sleep(300);
         }
 
