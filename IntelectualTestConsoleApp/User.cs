@@ -6,10 +6,10 @@
 
     public string Diagnosis;
 
-    public User(string name)
+    public User(string name, int rightAnswersCount = 0)
     {
         Name = name;
-        RightAnswersCount = 0;
+        RightAnswersCount = rightAnswersCount;
     }
 
     public void Deconstruct(out string name, out int rightAnswersCount, out string diagnosis)
@@ -19,8 +19,19 @@
         diagnosis = Diagnosis;
     }
 
+    public override string ToString()
+    {
+        return $"{Name}#{RightAnswersCount}#{Diagnosis}";
+    }
+
     public void AddRightAnswer()
     {
         RightAnswersCount++;
+    }
+
+    public void ResetStats()
+    {
+        RightAnswersCount = 0;
+        Diagnosis = string.Empty;
     }
 }

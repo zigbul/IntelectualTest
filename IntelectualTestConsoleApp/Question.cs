@@ -14,4 +14,9 @@
         text = Text;
         rightAnswer = RightAnswer;
     }
+
+    public override string ToString()
+    {
+        return $"{Text}#{RightAnswer}";
+    }
 }

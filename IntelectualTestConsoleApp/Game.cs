@@ -17,9 +17,9 @@
 
             int userInput;
 
-            while (TryGetUserInput(out userInput) == false) {}
+            while (TryGetUserInput(out userInput) == false) { }
 
-            switch(userInput)
+            switch (userInput)
             {
                 case 1:
                     TestUser(user);
@@ -67,11 +67,11 @@
             userInput = int.Parse(Console.ReadLine());
             return true;
         }
-        catch(FormatException)
+        catch (FormatException)
         {
             Console.WriteLine("Нужно ввести число!");
         }
-        catch(OverflowException)
+        catch (OverflowException)
         {
             Console.WriteLine("Число слишком большое!");
         }
@@ -105,6 +105,7 @@
         while (_isTesting)
         {
             Console.Clear();
+            user.ResetStats();
 
             Console.WriteLine($"{user.Name}, Вам нужно ответить на несколько вопросов. Начнём!\n");
 
@@ -121,7 +122,7 @@
 
                 int userAnswer;
 
-                while (TryGetUserInput(out userAnswer) == false) {}
+                while (TryGetUserInput(out userAnswer) == false) { }
 
                 Console.WriteLine();
 
@@ -142,7 +143,7 @@
             Console.WriteLine($"\nВы ответили правильно на {rightAnswersCount} из {questionsCount} вопросов.");
             Console.WriteLine($"Поздравляю, {name}. Вы - {diagnosis}!");
 
-            WriteResultsToFile(name, rightAnswersCount, diagnosis);
+            FileSystem.Save(user, FileNames.Users);
 
             Console.WriteLine("\nХотите пройти тест еще раз? (да/нет)\n");
 
@@ -181,31 +182,9 @@
         return diagnoses[indexOfDiagnose];
     }
 
-    private void WriteResultsToFile(string userName, int rightAnswersCount, string diagnose)
-    {
-        string resultFilePath = GetResultsFilePath();
-
-        using (StreamWriter writer = new StreamWriter(resultFilePath, true, System.Text.Encoding.Default))
-        {
-            writer.WriteLine($"{userName} {rightAnswersCount} {diagnose}");
-        }
-    }
-
-    private string GetResultsFilePath()
-    {
-        string currentDirectoryPath = Directory.GetCurrentDirectory();
-        string projectDirectoryPath = Path.Combine(currentDirectoryPath, @"..\..\..\");
-        string resultsFileName = "results.txt";
-        string resultsFileNamePath = Path.Combine(projectDirectoryPath, resultsFileName);
-
-        return resultsFileNamePath;
-    }
-
     private void PrintResults()
     {
         Console.Clear();
-
-        string pathToResults = GetResultsFilePath();
 
         const int FirstColumnWidth = 16;
         const int SecondColumnWidth = 25;
@@ -218,31 +197,20 @@
         Console.WriteLine($"{header}");
         Console.WriteLine(separator);
 
-        if (File.Exists(pathToResults) == false)
-        {
-            using FileStream fs = File.Create(pathToResults);
-        }
+        var users = new UsersStorage().Users;
 
-        bool areResultsNotEmpty = new FileInfo(pathToResults).Length != 0;
-
-        if (areResultsNotEmpty)
+        if (users.Count > 0)
         {
-            using (StreamReader sr = new StreamReader(pathToResults))
+            foreach (var user in users)
             {
-                string resultLine = sr.ReadLine();
+                var (userName, rightAnswersCount, diagnose) = user;
 
-                while (string.IsNullOrEmpty(resultLine) == false)
+                if (userName.Length > FirstColumnWidth)
                 {
-                    string[] resultInfo = resultLine.Split(' ');
-
-                    string userName = resultInfo[0];
-                    int rightAnswersCount = int.Parse(resultInfo[1]);
-                    string diagnose = resultInfo[2];
-
-                    Console.WriteLine($"|| {userName,FirstColumnWidth} || {rightAnswersCount,SecondColumnWidth} || {diagnose,ThirdColumnWidth} ||");
-                    
-                    resultLine = sr.ReadLine();
+                    userName = userName.Substring(0, FirstColumnWidth - 3) + "...";
                 }
+
+                Console.WriteLine($"|| {userName,-FirstColumnWidth} || {rightAnswersCount,-SecondColumnWidth} || {diagnose,ThirdColumnWidth} ||");
             }
         }
         else
